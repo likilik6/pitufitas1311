@@ -311,4 +311,111 @@ function render(){
     } else if(d.type==="buscar"){
       card.innerHTML='<div class="body"><div class="row1"><p class="name"><a href="'+esc(d.id)+'" target="_blank" rel="noopener">'+esc(d.name)+' →</a></p></div><p class="meta">📍 '+esc(d.zona)+' · '+esc(d.dorm)+'</p><div class="tags"><span class="tag bus">🔎 Búsqueda Idealista en vivo</span></div></div>';
     } else {
-      const [pl,pc]=presLabel[d.pres]||["",""]; const links=d.links&&d.links.leng
+      const [pl,pc]=presLabel[d.pres]||["",""]; const links=d.links&&d.links.length?d.links:[{w:"Ver",u:d.id}];
+      const srcs='<div class="srcs"><span class="lbl">'+(links.length>1?"Ver en "+links.length+" webs:":"Ver:")+'</span>'+links.map(l=>'<a class="src" href="'+esc(l.u)+'" target="_blank" rel="noopener">'+esc(l.w)+' →</a>').join('')+'</div>';
+      const hasNote=!!(notes[d.id]&&notes[d.id].trim());
+      const isNew=(d.alta===FECHA_ISO);
+      card.innerHTML='<div class="body"><div class="row1"><p class="name"><a href="'+esc(links[0].u)+'" target="_blank" rel="noopener">'+esc(d.name)+'</a>'+(isNew?'<span class="nuevo">NUEVO</span>':'')+'</p>'+
+        '<div class="acts"><button class="btn star '+(on?"on":"")+'" title="Favorito">'+(on?"★":"☆")+'</button>'+
+        '<button class="btn note '+(hasNote?"has":"")+'" title="Comentario">📝</button>'+
+        '<button class="btn dismiss" title="Descartar">✕</button>'+
+        (d.mine?'<button class="btn del" title="Eliminar (lo añadiste tú)">🗑️</button>':'')+'</div></div>'+
+        '<p class="meta">📍 '+esc(d.zona)+' · <span class="precio">'+esc(d.precio)+'</span>'+(d.dorm?' · 🛏 '+esc(d.dorm):'')+(d.promotora&&d.promotora!=="—"?' · '+esc(d.promotora):'')+(d.alta?' · <span class="alta">🗓 Añadido el '+fmtDate(d.alta)+'</span>':'')+'</p>'+
+        '<div class="tags"><span class="tag '+(d.type==="coop"?"coop":"nueva")+'">'+(d.type==="coop"?"🏢 Cooperativa":"🏠 Obra nueva")+'</span>'+
+        (pl?'<span class="tag '+pc+'">'+pl+'</span>':'')+(d.mine?'<span class="tag mine">✍️ Añadido por ti</span>':'')+(d.fase&&d.fase!=="—"?'<span class="tag">'+esc(d.fase)+'</span>':'')+'</div>'+
+        srcs+
+        '<div class="notebox"><textarea placeholder="Escribe aquí tus comentarios sobre esta vivienda…"></textarea><div class="notesaved" style="display:none">Guardado ✓</div></div></div>';
+      card.querySelector(".star").addEventListener("click",()=>toggle(FAV_KEY,d.id));
+      card.querySelector(".dismiss").addEventListener("click",()=>toggle(DESC_KEY,d.id));
+      if(d.mine) card.querySelector(".del").addEventListener("click",()=>{ if(confirm("¿Eliminar este anuncio que añadiste?")){ setVal(CUSTOM_KEY, getArr(CUSTOM_KEY).filter(c=>c.id!==d.id)); render(); } });
+      const nb=card.querySelector(".notebox"), ta=nb.querySelector("textarea"), saved=nb.querySelector(".notesaved");
+      ta.value = notes[d.id]||"";
+      card.querySelector(".note").addEventListener("click",()=>{ nb.classList.toggle("open"); if(nb.classList.contains("open")) ta.focus(); });
+      let t; ta.addEventListener("input",()=>{ const o=getObj(NOTE_KEY); o[d.id]=ta.value; setVal(NOTE_KEY,o); card.querySelector(".note").classList.toggle("has", !!ta.value.trim()); saved.style.display="block"; clearTimeout(t); t=setTimeout(()=>saved.style.display="none",1200); });
+    }
+    list.appendChild(card);
+  }
+}
+
+const FECHA_ISO = (function(){ const p=FECHA.split("/"); return p.length===3 ? (p[2]+"-"+p[1]+"-"+p[0]) : FECHA; })();
+
+// añadir anuncio propio
+const addform=document.getElementById("addform");
+document.getElementById("btnAdd").addEventListener("click",()=>addform.classList.toggle("open"));
+document.getElementById("f-cancel").addEventListener("click",()=>{ addform.classList.remove("open"); });
+document.getElementById("f-save").addEventListener("click",()=>{
+  const url=document.getElementById("f-url").value.trim();
+  if(!/^https?:\/\//i.test(url)){ alert("Pega un enlace válido que empiece por http(s)://"); return; }
+  let host=""; try{ host=new URL(url).hostname.replace(/^www\./,""); }catch(e){}
+  const hoy=new Date().toISOString().slice(0,10);
+  const item={ id:url, mine:true, type:document.getElementById("f-tipo").value, alta:hoy,
+    name:(document.getElementById("f-name").value.trim()||("Anuncio añadido"+(host?(" · "+host):""))),
+    zona:(document.getElementById("f-zona").value.trim()||"—"),
+    precio:(document.getElementById("f-precio").value.trim()||"por confirmar"),
+    dorm:(document.getElementById("f-dorm").value.trim()||""), promotora:"", fase:"Añadido manualmente", pres:"pc",
+    links:[{w:(host||"Enlace"),u:url}] };
+  const cur=getArr(CUSTOM_KEY);
+  if(cur.some(c=>c.id===url)||DATA.some(d=>d.id===url)){ alert("Ese enlace ya está en la lista."); return; }
+  cur.push(item); setVal(CUSTOM_KEY,cur);
+  ["f-url","f-name","f-zona","f-precio","f-dorm"].forEach(i=>document.getElementById(i).value="");
+  addform.classList.remove("open"); filter="mine";
+  document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x.dataset.f==="mine"));
+  render();
+});
+
+// acceso rápido a portales con desplegable de municipio
+const IDE_F=",precio-hasta_420000,de-tres-dormitorios/", FOTO_F="/l?filter=isnewconstruction";
+const MUNIS=[
+  {n:"Collado Villalba", ide:"https://www.idealista.com/venta-viviendas/collado-villalba-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/collado-villalba/todas-las-zonas"+FOTO_F},
+  {n:"Madrid Nuevo Norte (Las Tablas)", ide:"https://www.idealista.com/venta-viviendas/madrid/fuencarral-el-pardo/las-tablas/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/madrid-capital/las-tablas"+FOTO_F},
+  {n:"Alcobendas", ide:"https://www.idealista.com/venta-viviendas/alcobendas-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/alcobendas/todas-las-zonas"+FOTO_F},
+  {n:"San Sebastián de los Reyes", ide:"https://www.idealista.com/venta-viviendas/san-sebastian-de-los-reyes-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/san-sebastian-de-los-reyes/todas-las-zonas"+FOTO_F},
+  {n:"Las Rozas de Madrid", ide:"https://www.idealista.com/venta-viviendas/las-rozas-de-madrid-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/las-rozas-de-madrid/todas-las-zonas"+FOTO_F},
+  {n:"Torrelodones", ide:"https://www.idealista.com/venta-viviendas/torrelodones-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/torrelodones/todas-las-zonas"+FOTO_F},
+  {n:"Colmenar Viejo", ide:"https://www.idealista.com/venta-viviendas/colmenar-viejo-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/colmenar-viejo/todas-las-zonas"+FOTO_F},
+  {n:"Tres Cantos", ide:"https://www.idealista.com/venta-viviendas/tres-cantos-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/tres-cantos/todas-las-zonas"+FOTO_F},
+  {n:"Soto del Real", ide:"https://www.idealista.com/venta-viviendas/soto-del-real-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/soto-del-real/todas-las-zonas"+FOTO_F},
+  {n:"Collado Mediano", ide:"https://www.idealista.com/venta-viviendas/collado-mediano-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/collado-mediano/todas-las-zonas"+FOTO_F},
+  {n:"Galapagar", ide:"https://www.idealista.com/venta-viviendas/galapagar-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/galapagar/todas-las-zonas"+FOTO_F},
+  {n:"Moralzarzal", ide:"https://www.idealista.com/venta-viviendas/moralzarzal-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/moralzarzal/todas-las-zonas"+FOTO_F},
+  {n:"Guadarrama", ide:"https://www.idealista.com/venta-viviendas/guadarrama-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/guadarrama/todas-las-zonas"+FOTO_F},
+  {n:"Becerril de la Sierra", ide:"https://www.idealista.com/venta-viviendas/becerril-de-la-sierra-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/becerril-de-la-sierra/todas-las-zonas"+FOTO_F}
+];
+(function(){
+  const sel=document.getElementById("muni");
+  MUNIS.forEach((m,i)=>{ const o=document.createElement("option"); o.value=i; o.textContent=m.n; sel.appendChild(o); });
+  const upd=()=>{ const m=MUNIS[sel.value||0]; document.getElementById("goIde").href=m.ide; document.getElementById("goFoto").href=m.foto; };
+  sel.addEventListener("change",upd); sel.value=0; upd();
+})();
+
+document.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{ document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active")); c.classList.add("active"); filter=c.dataset.f; render(); }));
+document.querySelectorAll(".stat").forEach(s=>s.addEventListener("click",()=>{ const f=s.dataset.f; if(!f) return; filter=f; document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active", x.dataset.f===f)); render(); }));
+document.getElementById("q").addEventListener("input",render);
+document.getElementById("sort").addEventListener("change",e=>{ sortMode=e.target.value; render(); });
+document.getElementById("actualizado").textContent="Actualizado: "+FECHA+" · 3+ hab · ≤ 420.000 € (sin IVA) · ⭐ ✕ 📝 y anuncios añadidos se guardan en este navegador";
+render();
+
+// Arranque de la sincronización: baja lo guardado en la nube; si no hay nada, sube lo local.
+pullRemote().then(function(res){ if(res.state==="empty"){ var s=_snap(); if(SYNC_KEYS.some(function(k){ var v=s[k]; return v && v!=="[]" && v!=="{}"; })) pushRemote(); } dailyBackup(); });
+var _dlb=document.getElementById("dlBak"); if(_dlb) _dlb.addEventListener("click", downloadBackup);
+window.addEventListener("focus", function(){ pullRemote(); });
+document.addEventListener("visibilitychange", function(){ if(!document.hidden) pullRemote(); });
+
+// Panel derecho: informes en PDF + resumen del último
+fetch("manifest.json", {cache:"no-store"}).then(r=>r.json()).then(m=>{
+  const el=document.getElementById("reportbody"); if(!el) return;
+  const it=(m&&m.informes)||[];
+  if(!it.length){ el.textContent="Aún no hay informes."; return; }
+  const latest=it[0];
+  let html='<a class="dl" href="pdf/'+esc(latest.archivo)+'" download>⬇️ Informe de hoy · '+esc(latest.fecha)+'</a>';
+  if(latest.resumen) html+='<div class="resumen">'+esc(latest.resumen)+'</div>';
+  if(it.length>1){
+    html+='<p class="hist">Informes anteriores</p><div class="histlist">';
+    it.slice(1).forEach(f=>{ html+='<a href="pdf/'+esc(f.archivo)+'" download>📄 '+esc(f.fecha)+'</a>'; });
+    html+='</div>';
+  }
+  el.innerHTML=html;
+}).catch(()=>{ const el=document.getElementById("reportbody"); if(el) el.textContent="No se pudo cargar (funciona con la web ya publicada)."; });
+</script>
+</body>
+</html>
