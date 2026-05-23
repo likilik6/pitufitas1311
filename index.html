@@ -218,7 +218,17 @@ const DATA = [
 const FAV_KEY="obraNuevaFavoritos", DESC_KEY="obraNuevaDescartados", NOTE_KEY="obraNuevaNotas", CUSTOM_KEY="obraNuevaPropios";
 const getArr = k => { try { return JSON.parse(localStorage.getItem(k)||"[]"); } catch(e){ return []; } };
 const getObj = k => { try { return JSON.parse(localStorage.getItem(k)||"{}"); } catch(e){ return {}; } };
-const setVal = (k,v) => localStorage.setItem(k, JSON.stringify(v));
+
+// ===== Sincronización compartida en la nube (kvdb) — datos comunes a todos los usuarios =====
+const SYNC_URL = "https://kvdb.io/9rv5pU4b2PTAcvY8scJiWa/obra-data";
+const SYNC_KEYS = [FAV_KEY, DESC_KEY, NOTE_KEY, CUSTOM_KEY];
+let _pushT;
+function _snap(){ var o={}; SYNC_KEYS.forEach(function(k){ o[k]=localStorage.getItem(k); }); return o; }
+function _apply(o){ var ch=false; SYNC_KEYS.forEach(function(k){ var v=(o[k]==null?null:o[k]); var cur=localStorage.getItem(k); if(v!==cur){ if(v==null) localStorage.removeItem(k); else localStorage.setItem(k,v); ch=true; } }); return ch; }
+function pushRemote(){ clearTimeout(_pushT); _pushT=setTimeout(function(){ fetch(SYNC_URL,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(_snap())}).catch(function(){}); }, 700); }
+function pullRemote(){ return fetch(SYNC_URL,{cache:"no-store"}).then(function(r){ if(r.status===404) return {state:"empty"}; if(!r.ok) return {state:"error"}; return r.text().then(function(t){ var o; try{o=JSON.parse(t);}catch(e){return {state:"error"};} if(o&&typeof o==="object"&&Object.keys(o).length){ if(_apply(o)) render(); return {state:"applied"}; } return {state:"empty"}; }); }).catch(function(){ return {state:"error"}; }); }
+
+const setVal = (k,v) => { localStorage.setItem(k, JSON.stringify(v)); if(SYNC_KEYS.indexOf(k)>-1) pushRemote(); };
 function toggle(k,id){ let a=getArr(k); if(a.includes(id)) a=a.filter(x=>x!==id); else a.push(id); setVal(k,a); render(); }
 function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
 function fmtDate(iso){ if(!iso) return ""; const p=String(iso).split("-"); return p.length===3 ? (p[2]+"/"+p[1]+"/"+p[0]) : iso; }
@@ -359,6 +369,11 @@ document.getElementById("q").addEventListener("input",render);
 document.getElementById("sort").addEventListener("change",e=>{ sortMode=e.target.value; render(); });
 document.getElementById("actualizado").textContent="Actualizado: "+FECHA+" · 3+ hab · ≤ 420.000 € (sin IVA) · ⭐ ✕ 📝 y anuncios añadidos se guardan en este navegador";
 render();
+
+// Arranque de la sincronización: baja lo guardado en la nube; si no hay nada, sube lo local.
+pullRemote().then(function(res){ if(res.state==="empty"){ var s=_snap(); if(SYNC_KEYS.some(function(k){ var v=s[k]; return v && v!=="[]" && v!=="{}"; })) pushRemote(); } });
+window.addEventListener("focus", function(){ pullRemote(); });
+document.addEventListener("visibilitychange", function(){ if(!document.hidden) pullRemote(); });
 
 // Panel derecho: informes en PDF + resumen del último
 fetch("manifest.json", {cache:"no-store"}).then(r=>r.json()).then(m=>{
