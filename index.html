@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Obra nueva + Cooperativas · Madrid norte</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin:0; background:#eef1f6; color:#15181d; font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif; font-size:14px; }
+.wrap { max-width:960px; margin:0 auto; padding:20px 16px 70px; }
+.head { background:linear-gradient(120deg,#1565c0,#3a8dde); color:#fff; border-radius:16px; padding:18px 20px; box-shadow:0 6px 18px rgba(21,101,192,.18); }
+.head h1 { font-size:21px; margin:0 0 4px; }
+.head p { margin:0; font-size:12.5px; opacity:.92; }
+.portals { background:#fff; border:1px solid #e2e6ee; border-radius:14px; padding:14px 16px; margin:14px 0; box-shadow:0 1px 2px rgba(0,0,0,.03); }
+.portals h3 { margin:0 0 10px; font-size:13.5px; color:#15181d; }
+.portals .pr { display:flex; gap:9px; flex-wrap:wrap; align-items:center; }
+.portals select { border:1px solid #d4d7dd; border-radius:10px; padding:9px 11px; font-size:14px; min-width:210px; background:#fff; }
+.pbtn { text-decoration:none; border-radius:10px; padding:10px 16px; font-size:13.5px; font-weight:600; color:#fff; display:inline-block; }
+.pbtn.ide { background:#1a8754; }
+.pbtn.ide:hover { background:#157246; }
+.pbtn.foto { background:#e2007a; }
+.pbtn.foto:hover { background:#c00069; }
+.portals .hint { font-size:11px; color:#88909e; margin:9px 0 0; }
+.stats { display:flex; gap:10px; flex-wrap:wrap; margin:14px 0; }
+.stat { background:#fff; border:1px solid #e2e6ee; border-radius:12px; padding:10px 14px; flex:1; min-width:100px; text-align:center; }
+.stat b { display:block; font-size:22px; color:#1565c0; line-height:1.1; }
+.stat span { font-size:11.5px; color:#667; }
+.toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+.chip { border:1px solid #d4d7dd; background:#fff; color:#333; border-radius:999px; padding:7px 13px; font-size:13px; cursor:pointer; transition:.12s; }
+.chip:hover { border-color:#1565c0; }
+.chip.active { background:#1565c0; border-color:#1565c0; color:#fff; }
+.add { border:1px solid #2e7d32; background:#e8f5e9; color:#2e7d32; border-radius:999px; padding:7px 13px; font-size:13px; cursor:pointer; }
+.search { flex:1; min-width:160px; border:1px solid #d4d7dd; border-radius:10px; padding:8px 11px; font-size:13px; }
+.addform { background:#fff; border:1px solid #cfe0cf; border-radius:12px; padding:14px; margin-bottom:14px; display:none; }
+.addform.open { display:block; }
+.addform h3 { margin:0 0 10px; font-size:14px; color:#2e7d32; }
+.addform input, .addform select { width:100%; border:1px solid #d4d7dd; border-radius:8px; padding:8px 10px; font-size:13px; margin-bottom:8px; }
+.addform .grid { display:flex; gap:8px; flex-wrap:wrap; }
+.addform .grid > * { flex:1; min-width:130px; }
+.addform .acts2 { display:flex; gap:8px; margin-top:4px; }
+.bsave { background:#2e7d32; color:#fff; border:none; border-radius:8px; padding:8px 16px; font-size:13px; cursor:pointer; }
+.bcancel { background:#eee; color:#444; border:none; border-radius:8px; padding:8px 16px; font-size:13px; cursor:pointer; }
+.count { color:#667; font-size:12px; margin:2px 2px 10px; }
+.card { background:#fff; border:1px solid #e6e8ec; border-left:5px solid #2e7d32; border-radius:12px; padding:13px 15px; margin-bottom:11px; display:flex; gap:13px; align-items:flex-start; transition:.12s; box-shadow:0 1px 2px rgba(0,0,0,.03); }
+.card:hover { box-shadow:0 5px 16px rgba(0,0,0,.09); }
+.card.coop { border-left-color:#1565c0; }
+.card.buscar { border-left-color:#9aa3b2; background:#fafbfd; }
+.card.mine { border-left-color:#8e24aa; }
+.card.fav { background:#fffdf5; }
+.body { flex:1; min-width:0; }
+.row1 { display:flex; align-items:flex-start; gap:8px; }
+.name { font-weight:600; font-size:15.5px; margin:0; flex:1; }
+.name a { color:#0b57d0; text-decoration:none; }
+.name a:hover { text-decoration:underline; }
+.acts { display:flex; gap:4px; flex:0 0 auto; }
+.btn { border:none; background:transparent; cursor:pointer; font-size:19px; line-height:1; padding:2px 4px; border-radius:8px; color:#c2c7d0; }
+.btn:hover { background:#f2f4f8; }
+.btn.note.has { color:#8e24aa; }
+.star.on { color:#f5a623; }
+.dismiss:hover, .del:hover { color:#b3261e; }
+.restore { font-size:12px; color:#1565c0; background:#eaf2ff; border:none; border-radius:8px; padding:5px 10px; cursor:pointer; }
+.precio { font-weight:700; font-size:15px; color:#15181d; }
+.meta { color:#445; font-size:13px; margin:5px 0 0; }
+.tags { margin-top:8px; display:flex; flex-wrap:wrap; gap:6px; }
+.tag { font-size:11px; padding:3px 9px; border-radius:7px; background:#eef1f5; color:#445; }
+.tag.coop { background:#e3f0ff; color:#1565c0; }
+.tag.nueva { background:#e8f5e9; color:#2e7d32; }
+.tag.pc { background:#fff4e0; color:#a36a00; }
+.tag.bus { background:#eef0f3; color:#556; }
+.tag.mine { background:#f5e6fb; color:#8e24aa; }
+.srcs { margin-top:9px; display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.srcs .lbl { font-size:11px; color:#88909e; margin-right:2px; }
+.src { font-size:11.5px; background:#eef4ff; color:#0b57d0; border:1px solid #d6e4ff; border-radius:7px; padding:3px 9px; text-decoration:none; }
+.src:hover { background:#dde9ff; }
+.notebox { margin-top:9px; display:none; }
+.notebox.open { display:block; }
+.notebox textarea { width:100%; border:1px solid #d9c4e6; border-radius:8px; padding:8px 10px; font-size:12.5px; font-family:inherit; resize:vertical; min-height:48px; background:#fcf7ff; }
+.notesaved { font-size:11px; color:#8e24aa; margin-top:3px; }
+.notedisc { margin-top:8px; background:#fcf7ff; border:1px solid #e7d6f0; border-radius:8px; padding:8px 10px; font-size:12.5px; color:#5b2c6f; white-space:pre-wrap; }
+.empty { color:#889; text-align:center; padding:34px 0; }
+.foot { color:#99a; font-size:11px; margin-top:18px; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>🏗️ Obra nueva + Cooperativas · Madrid norte</h1>
+    <p id="actualizado">3+ habitaciones · precio/coste ≤ 420.000 € (sin IVA)</p>
+  </div>
+
+  <div class="portals">
+    <h3>🔎 Buscar ya en los portales (obra nueva · 3 dorm · ≤ 420.000 €)</h3>
+    <div class="pr">
+      <select id="muni"></select>
+      <a class="pbtn ide" id="goIde" target="_blank" rel="noopener">Abrir en Idealista →</a>
+      <a class="pbtn foto" id="goFoto" target="_blank" rel="noopener">Abrir en Fotocasa →</a>
+    </div>
+    <p class="hint">Elige municipio (por defecto Collado Villalba). Truco: dentro de Idealista/Fotocasa pulsa "Guardar búsqueda" / "Crear alerta" para que te avisen al instante de cada anuncio nuevo.</p>
+  </div>
+
+  <div class="portals">
+    <h3>📄 Informes diarios en PDF</h3>
+    <div class="pr" id="pdflist">Cargando informes…</div>
+    <p class="hint">Descarga el informe completo de cualquier día. Cada día se añade uno nuevo automáticamente.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="s-total">0</b><span>oportunidades</span></div>
+    <div class="stat"><b id="s-fav">0</b><span>⭐ favoritas</span></div>
+    <div class="stat"><b id="s-coop">0</b><span>cooperativas</span></div>
+    <div class="stat"><b id="s-mine">0</b><span>✍️ tuyas</span></div>
+    <div class="stat"><b id="s-desc">0</b><span>descartadas</span></div>
+  </div>
+
+  <div class="toolbar">
+    <span class="chip active" data-f="todas">Todas</span>
+    <span class="chip" data-f="fav">⭐ Favoritas</span>
+    <span class="chip" data-f="coop">🏢 Cooperativas</span>
+    <span class="chip" data-f="nueva">🏠 Obra nueva</span>
+    <span class="chip" data-f="mine">✍️ Tuyas</span>
+    <span class="chip" data-f="buscar">🔎 Idealista</span>
+    <span class="chip" data-f="desc">🗑️ Descartadas</span>
+    <button class="add" id="btnAdd">➕ Añadir anuncio</button>
+    <input class="search" id="q" placeholder="Buscar…">
+  </div>
+
+  <div class="addform" id="addform">
+    <h3>➕ Añadir un anuncio (pega el enlace de Idealista, Fotocasa, etc.)</h3>
+    <input id="f-url" placeholder="Enlace (obligatorio) — p.ej. https://www.idealista.com/inmueble/108994866/">
+    <div class="grid">
+      <input id="f-name" placeholder="Nombre / título">
+      <input id="f-zona" placeholder="Zona / municipio">
+    </div>
+    <div class="grid">
+      <input id="f-precio" placeholder="Precio (p.ej. 399.000 €)">
+      <select id="f-tipo"><option value="nueva">Obra nueva</option><option value="coop">Cooperativa</option></select>
+      <input id="f-dorm" placeholder="Dormitorios (p.ej. 3 dorm)">
+    </div>
+    <div class="acts2"><button class="bsave" id="f-save">Guardar</button><button class="bcancel" id="f-cancel">Cancelar</button></div>
+  </div>
+
+  <div class="count" id="count"></div>
+  <div id="list"></div>
+  <p class="foot">Cada promoción muestra sus enlaces. Idealista no permite extraer fichas (por eso sus enlaces son búsquedas); puedes añadir manualmente cualquier anuncio con ➕. Tus favoritos, descartes, comentarios y anuncios añadidos se guardan en este equipo. La tarea diaria añade novedades y respeta todo lo tuyo.</p>
+</div>
+
+<script>
+const FECHA = "23/05/2026";
+const DATA = [
+  {id:"https://www.somosmarpy.com/hermanas/", name:"Residencial Tres Hermanas", type:"nueva", zona:"Collado Villalba", precio:"3 dorm desde 171.700 €", dorm:"1-3 dorm", promotora:"MARPY", fase:"16 viv · garaje incluido · aerotermia · obras iniciadas · últimas unidades", pres:"dentro",
+    links:[{w:"MARPY (ficha)",u:"https://www.somosmarpy.com/hermanas/"},{w:"Estatenearme (ficha)",u:"https://spain.estatenearme.com/residencial-edificio-tres-hermanas-en-collado-villalba"},{w:"Idealista (Villalba)",u:"https://www.idealista.com/venta-viviendas/collado-villalba-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/"}]},
+  {id:"https://www.aedashomes.com/pisos-en-venta-en-collado-villalba-obra-nueva-orbia", name:"Orbia", type:"nueva", zona:"Collado Villalba", precio:"3 dorm desde 251.500 €", dorm:"1-3 dorm", promotora:"AEDAS Homes", fase:"96 viv · garaje+trastero · piscina · junto a Cercanías", pres:"dentro",
+    links:[{w:"AEDAS (ficha)",u:"https://www.aedashomes.com/pisos-en-venta-en-collado-villalba-obra-nueva-orbia"},{w:"Idealista (obra nueva Villalba)",u:"https://www.idealista.com/en/venta-obranueva/collado-villalba-madrid/"},{w:"Yaencontre",u:"https://www.yaencontre.com/venta/obra-nueva/collado-villalba"}]},
+  {id:"https://www.habitatinmobiliaria.com/promociones/madrid/habitat-las-eras/", name:"Habitat Las Eras", type:"nueva", zona:"Collado Villalba", precio:"desde ~330.000 €", dorm:"3-4 dorm", promotora:"Habitat Inmobiliaria", fase:"72 viv · terrazas · piscina · obras iniciadas", pres:"dentro",
+    links:[{w:"Habitat (ficha)",u:"https://www.habitatinmobiliaria.com/promociones/madrid/habitat-las-eras/"},{w:"Brains RE (noticia)",u:"https://brainsre.news/habitat-obras-residencial-collado-villalba-17millones/"},{w:"Estudio arquitectura",u:"https://canoyescario.es/habitat-las-eras/"}]},
+  {id:"https://viviendasnuevas.com/madrid/san-sebastian-de-los-reyes/promociones/", name:"C/ Santa Teresa de Jesús", type:"nueva", zona:"San Sebastián de los Reyes", precio:"desde 348.500 €", dorm:"2-3 dorm", promotora:"—", fase:"Entrega Q1 2026 · aerotermia", pres:"dentro",
+    links:[{w:"Fotocasa (ficha)",u:"https://www.fotocasa.es/es/comprar/obra-nueva/san-sebastian-de-los-reyes/20534638"},{w:"Idealista (buscar)",u:"https://www.idealista.com/venta-viviendas/san-sebastian-de-los-reyes-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/"}]},
+  {id:"https://www.colmenarstyle.com/", name:"ColmenarStyle", type:"nueva", zona:"Colmenar Viejo", precio:"desde 200.000 €", dorm:"1-3 dorm", promotora:"ColmenarStyle", fase:"Garaje · entrega 2027", pres:"dentro",
+    links:[{w:"Promotora",u:"https://www.colmenarstyle.com/"},{w:"Yaencontre",u:"https://www.yaencontre.com/promocion/obra-nueva/colmenar-viejo"}]},
+  {id:"https://www.habitatinmobiliaria.com/promociones/madrid/habitat-villalba/", name:"Habitat Villalba", type:"nueva", zona:"Collado Villalba", precio:"desde 301.000 €", dorm:"3 dorm · 2 baños", promotora:"Habitat Inmobiliaria", fase:"124,5 m² · garaje y trastero · piscina", pres:"dentro",
+    links:[{w:"Promotora",u:"https://www.habitatinmobiliaria.com/promociones/madrid/habitat-villalba/"},{w:"Idealista",u:"https://www.idealista.com/pro/habitatinmobiliaria/venta-viviendas/collado-villalba-madrid/"},{w:"Fotocasa",u:"https://www.fotocasa.es/es/comprar/obra-nueva/collado-villalba/19888944"},{w:"Viviendasnuevas",u:"https://viviendasnuevas.com/promociones/habitat-villalba_collado-villalba/3877"}]},
+  {id:"https://aunaarquitectos.com/proyectos/residencial-energy-house-collado-villalba/", name:"Residencial Energy House", type:"coop", zona:"Collado Villalba", precio:"desde 264.600 €", dorm:"2-3 dorm", promotora:"AUNA Arquitectos", fase:"13 viviendas · garaje+trastero · aerotermia", pres:"dentro",
+    links:[{w:"Promotora",u:"https://aunaarquitectos.com/proyectos/residencial-energy-house-collado-villalba/"},{w:"Idealista (ficha)",u:"https://www.idealista.com/obra-nueva/108993718/"},{w:"EstateNearMe",u:"https://spain.estatenearme.com/es/madrid/city/collado-villalba/sale/complexes/property/residencial-energy-house"}]},
+  {id:"https://castrumdesarrollos.com/promocion-green-path/", name:"Green Path", type:"nueva", zona:"Collado Villalba", precio:"por confirmar", dorm:"3-4 dorm (pareados/pisos)", promotora:"Castrum Desarrollos", fase:"Entrega ~2028 · piscina, jardines", pres:"pc",
+    links:[{w:"Promotora",u:"https://castrumdesarrollos.com/promocion-green-path/"},{w:"Idealista (ficha)",u:"https://www.idealista.com/pro/hogares-guadarrama/obra-nueva/109953890/"}]},
+  {id:"https://ksanet.es/index.php/municipio/colmenar-viejo/", name:"Cooperativa Colmenar Viejo", type:"coop", zona:"Colmenar Viejo", precio:"desde 147.518 €", dorm:"1-3 dorm", promotora:"Ksanet", fase:"Cooperativa", pres:"dentro",
+    links:[{w:"Ksanet",u:"https://ksanet.es/index.php/municipio/colmenar-viejo/"}]},
+  {id:"https://www.gestilar.com/en/cooper-valgrande", name:"COOPER Valgrande", type:"coop", zona:"Alcobendas", precio:"por confirmar", dorm:"2-3 dorm", promotora:"Gestilar", fase:"VPPL", pres:"pc",
+    links:[{w:"Gestilar",u:"https://www.gestilar.com/en/cooper-valgrande"}]},
+  {id:"https://www.serprocolinmobiliaria.com/viviendas-en-curso/rincon-de-la-dehesa/", name:"Rincón de la Dehesa", type:"coop", zona:"San Sebastián de los Reyes", precio:"por confirmar", dorm:"2-3 dorm", promotora:"Serprocol", fase:"VPPL, terraza", pres:"pc",
+    links:[{w:"Serprocol",u:"https://www.serprocolinmobiliaria.com/viviendas-en-curso/rincon-de-la-dehesa/"}]},
+  {id:"https://comunidadessantagema.com/altos_de_villalba/", name:"Los Altos de Villalba", type:"coop", zona:"Collado Villalba", precio:"por confirmar", dorm:"3 dorm", promotora:"Comunidades Santa Gema", fase:"Cooperativa · Avda. de Galapagar", pres:"pc",
+    links:[{w:"Gestora (ficha)",u:"https://comunidadessantagema.com/altos_de_villalba/"}]},
+  {id:"https://lacooop.com/marketplace/obra-nueva/madrid/", name:"Cooperativas en captación (portal)", type:"coop", zona:"SSR · Alcobendas · Villalba · Galapagar", precio:"en captación", dorm:"—", promotora:"LACOOOP", fase:"Portal de captación · no es ficha única", pres:"pc",
+    links:[{w:"LACOOOP · S.S. Reyes",u:"https://lacooop.com/marketplace/promocion/proximos-lanzamientos-en-san-sebastian-de-los-reyes"},{w:"LACOOOP · Madrid norte",u:"https://lacooop.com/marketplace/obra-nueva/madrid/"}]},
+  {id:"https://www.idealista.com/venta-viviendas/alcobendas-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · Alcobendas", type:"buscar", zona:"Alcobendas", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
+  {id:"https://www.idealista.com/venta-viviendas/san-sebastian-de-los-reyes-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · San Sebastián de los Reyes", type:"buscar", zona:"San Sebastián de los Reyes", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
+  {id:"https://www.idealista.com/venta-viviendas/las-rozas-de-madrid-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · Las Rozas", type:"buscar", zona:"Las Rozas", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
+  {id:"https://www.idealista.com/venta-viviendas/collado-villalba-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · Collado Villalba", type:"buscar", zona:"Collado Villalba", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
+  {id:"https://www.idealista.com/venta-viviendas/colmenar-viejo-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · Colmenar Viejo", type:"buscar", zona:"Colmenar Viejo", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
+  {id:"https://www.idealista.com/venta-viviendas/tres-cantos-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · Tres Cantos", type:"buscar", zona:"Tres Cantos", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
+  {id:"https://www.idealista.com/venta-viviendas/madrid/fuencarral-el-pardo/las-tablas/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · Madrid Nuevo Norte (Las Tablas)", type:"buscar", zona:"Madrid Nuevo Norte", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"}
+];
+
+const FAV_KEY="obraNuevaFavoritos", DESC_KEY="obraNuevaDescartados", NOTE_KEY="obraNuevaNotas", CUSTOM_KEY="obraNuevaPropios";
+const getArr = k => { try { return JSON.parse(localStorage.getItem(k)||"[]"); } catch(e){ return []; } };
+const getObj = k => { try { return JSON.parse(localStorage.getItem(k)||"{}"); } catch(e){ return {}; } };
+const setVal = (k,v) => localStorage.setItem(k, JSON.stringify(v));
+function toggle(k,id){ let a=getArr(k); if(a.includes(id)) a=a.filter(x=>x!==id); else a.push(id); setVal(k,a); render(); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+
+let filter = "todas";
+const presLabel = { dentro:["Dentro de presupuesto","nueva"], pc:["Por confirmar","pc"], bus:["",""] };
+
+function allOpportunities(){
+  const custom = getArr(CUSTOM_KEY).filter(c=>!DATA.some(d=>d.id===c.id));
+  return DATA.concat(custom);
+}
+
+function render(){
+  const favs=getArr(FAV_KEY), desc=getArr(DESC_KEY), notes=getObj(NOTE_KEY);
+  const q=(document.getElementById("q").value||"").toLowerCase();
+  const list=document.getElementById("list"); list.innerHTML="";
+  const all=allOpportunities();
+
+  const oport=all.filter(d=>d.type!=="buscar" && !desc.includes(d.id));
+  document.getElementById("s-total").textContent=oport.length;
+  document.getElementById("s-fav").textContent=oport.filter(d=>favs.includes(d.id)).length;
+  document.getElementById("s-coop").textContent=oport.filter(d=>d.type==="coop").length;
+  document.getElementById("s-mine").textContent=oport.filter(d=>d.mine).length;
+  document.getElementById("s-desc").textContent=desc.filter(id=>all.some(d=>d.id===id&&d.type!=="buscar")).length;
+
+  let items; const showingDiscarded=(filter==="desc");
+  if(showingDiscarded) items=all.filter(d=>desc.includes(d.id)&&d.type!=="buscar");
+  else if(filter==="buscar") items=DATA.filter(d=>d.type==="buscar");
+  else { items=oport.slice();
+    if(filter==="fav") items=items.filter(d=>favs.includes(d.id));
+    else if(filter==="coop") items=items.filter(d=>d.type==="coop");
+    else if(filter==="nueva") items=items.filter(d=>d.type==="nueva");
+    else if(filter==="mine") items=items.filter(d=>d.mine);
+  }
+  if(q) items=items.filter(d=>(d.name+" "+d.zona+" "+(d.promotora||"")+" "+(d.fase||"")).toLowerCase().includes(q));
+  if(!showingDiscarded && filter!=="buscar"){ const o={dentro:0,pc:1};
+    items.sort((a,b)=>{const fa=favs.includes(a.id)?0:1,fb=favs.includes(b.id)?0:1; if(fa!==fb)return fa-fb; return (o[a.pres]||0)-(o[b.pres]||0);}); }
+
+  document.getElementById("count").textContent=items.length+(items.length===1?" resultado":" resultados");
+  if(!items.length){ list.innerHTML='<div class="empty">'+(showingDiscarded?"No has descartado ninguna.":"No hay resultados.")+'</div>'; return; }
+
+  for(const d of items){
+    const on=favs.includes(d.id), card=document.createElement("div");
+    card.className="card"+(d.type==="coop"?" coop":"")+(d.type==="buscar"?" buscar":"")+(d.mine?" mine":"")+(on&&!showingDiscarded?" fav":"");
+    if(showingDiscarded){
+      const dl=d.links&&d.links.length?d.links:[{w:"Ver",u:d.id}];
+      const dsrcs='<div class="srcs"><span class="lbl">'+(dl.length>1?"Ver en "+dl.length+" webs:":"Ver:")+'</span>'+dl.map(l=>'<a class="src" href="'+esc(l.u)+'" target="_blank" rel="noopener">'+esc(l.w)+' →</a>').join('')+'</div>';
+      const dn=(notes[d.id]&&notes[d.id].trim())?'<div class="notedisc">📝 '+esc(notes[d.id])+'</div>':'';
+      card.innerHTML='<div class="body"><div class="row1"><p class="name"><a href="'+esc(dl[0].u)+'" target="_blank" rel="noopener">'+esc(d.name)+'</a></p><button class="restore">↩ Restaurar</button></div><p class="meta">📍 '+esc(d.zona)+' · <span class="precio">'+esc(d.precio)+'</span>'+(d.dorm?' · 🛏 '+esc(d.dorm):'')+'</p>'+dsrcs+dn+'</div>';
+      card.querySelector(".restore").addEventListener("click",()=>toggle(DESC_KEY,d.id));
+    } else if(d.type==="buscar"){
+      card.innerHTML='<div class="body"><div class="row1"><p class="name"><a href="'+esc(d.id)+'" target="_blank" rel="noopener">'+esc(d.name)+' →</a></p></div><p class="meta">📍 '+esc(d.zona)+' · '+esc(d.dorm)+'</p><div class="tags"><span class="tag bus">🔎 Búsqueda Idealista en vivo</span></div></div>';
+    } else {
+      const [pl,pc]=presLabel[d.pres]||["",""]; const links=d.links&&d.links.length?d.links:[{w:"Ver",u:d.id}];
+      const srcs='<div class="srcs"><span class="lbl">'+(links.length>1?"Ver en "+links.length+" webs:":"Ver:")+'</span>'+links.map(l=>'<a class="src" href="'+esc(l.u)+'" target="_blank" rel="noopener">'+esc(l.w)+' →</a>').join('')+'</div>';
+      const hasNote=!!(notes[d.id]&&notes[d.id].trim());
+      card.innerHTML='<div class="body"><div class="row1"><p class="name"><a href="'+esc(links[0].u)+'" target="_blank" rel="noopener">'+esc(d.name)+'</a></p>'+
+        '<div class="acts"><button class="btn star '+(on?"on":"")+'" title="Favorito">'+(on?"★":"☆")+'</button>'+
+        '<button class="btn note '+(hasNote?"has":"")+'" title="Comentario">📝</button>'+
+        '<button class="btn dismiss" title="Descartar">✕</button>'+
+        (d.mine?'<button class="btn del" title="Eliminar (lo añadiste tú)">🗑️</button>':'')+'</div></div>'+
+        '<p class="meta">📍 '+esc(d.zona)+' · <span class="precio">'+esc(d.precio)+'</span>'+(d.dorm?' · 🛏 '+esc(d.dorm):'')+(d.promotora&&d.promotora!=="—"?' · '+esc(d.promotora):'')+'</p>'+
+        '<div class="tags"><span class="tag '+(d.type==="coop"?"coop":"nueva")+'">'+(d.type==="coop"?"🏢 Cooperativa":"🏠 Obra nueva")+'</span>'+
+        (pl?'<span class="tag '+pc+'">'+pl+'</span>':'')+(d.mine?'<span class="tag mine">✍️ Añadido por ti</span>':'')+(d.fase&&d.fase!=="—"?'<span class="tag">'+esc(d.fase)+'</span>':'')+'</div>'+
+        srcs+
+        '<div class="notebox"><textarea placeholder="Escribe aquí tus comentarios sobre esta vivienda…"></textarea><div class="notesaved" style="display:none">Guardado ✓</div></div></div>';
+      card.querySelector(".star").addEventListener("click",()=>toggle(FAV_KEY,d.id));
+      card.querySelector(".dismiss").addEventListener("click",()=>toggle(DESC_KEY,d.id));
+      if(d.mine) card.querySelector(".del").addEventListener("click",()=>{ if(confirm("¿Eliminar este anuncio que añadiste?")){ setVal(CUSTOM_KEY, getArr(CUSTOM_KEY).filter(c=>c.id!==d.id)); render(); } });
+      const nb=card.querySelector(".notebox"), ta=nb.querySelector("textarea"), saved=nb.querySelector(".notesaved");
+      ta.value = notes[d.id]||"";
+      card.querySelector(".note").addEventListener("click",()=>{ nb.classList.toggle("open"); if(nb.classList.contains("open")) ta.focus(); });
+      let t; ta.addEventListener("input",()=>{ const o=getObj(NOTE_KEY); o[d.id]=ta.value; setVal(NOTE_KEY,o); card.querySelector(".note").classList.toggle("has", !!ta.value.trim()); saved.style.display="block"; clearTimeout(t); t=setTimeout(()=>saved.style.display="none",1200); });
+    }
+    list.appendChild(card);
+  }
+}
+
+// añadir anuncio propio
+const addform=document.getElementById("addform");
+document.getElementById("btnAdd").addEventListener("click",()=>addform.classList.toggle("open"));
+document.getElementById("f-cancel").addEventListener("click",()=>{ addform.classList.remove("open"); });
+document.getElementById("f-save").addEventListener("click",()=>{
+  const url=document.getElementById("f-url").value.trim();
+  if(!/^https?:\/\//i.test(url)){ alert("Pega un enlace válido que empiece por http(s)://"); return; }
+  let host=""; try{ host=new URL(url).hostname.replace(/^www\./,""); }catch(e){}
+  const item={ id:url, mine:true, type:document.getElementById("f-tipo").value,
+    name:(document.getElementById("f-name").value.trim()||("Anuncio añadido"+(host?(" · "+host):""))),
+    zona:(document.getElementById("f-zona").value.trim()||"—"),
+    precio:(document.getElementById("f-precio").value.trim()||"por confirmar"),
+    dorm:(document.getElementById("f-dorm").value.trim()||""), promotora:"", fase:"Añadido manualmente", pres:"pc",
+    links:[{w:(host||"Enlace"),u:url}] };
+  const cur=getArr(CUSTOM_KEY);
+  if(cur.some(c=>c.id===url)||DATA.some(d=>d.id===url)){ alert("Ese enlace ya está en la lista."); return; }
+  cur.push(item); setVal(CUSTOM_KEY,cur);
+  ["f-url","f-name","f-zona","f-precio","f-dorm"].forEach(i=>document.getElementById(i).value="");
+  addform.classList.remove("open"); filter="mine";
+  document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x.dataset.f==="mine"));
+  render();
+});
+
+// acceso rápido a portales con desplegable de municipio
+const IDE_F=",precio-hasta_420000,de-tres-dormitorios/", FOTO_F="/l?filter=isnewconstruction";
+const MUNIS=[
+  {n:"Collado Villalba", ide:"https://www.idealista.com/venta-viviendas/collado-villalba-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/collado-villalba/todas-las-zonas"+FOTO_F},
+  {n:"Madrid Nuevo Norte (Las Tablas)", ide:"https://www.idealista.com/venta-viviendas/madrid/fuencarral-el-pardo/las-tablas/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/madrid-capital/las-tablas"+FOTO_F},
+  {n:"Alcobendas", ide:"https://www.idealista.com/venta-viviendas/alcobendas-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/alcobendas/todas-las-zonas"+FOTO_F},
+  {n:"San Sebastián de los Reyes", ide:"https://www.idealista.com/venta-viviendas/san-sebastian-de-los-reyes-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/san-sebastian-de-los-reyes/todas-las-zonas"+FOTO_F},
+  {n:"Las Rozas de Madrid", ide:"https://www.idealista.com/venta-viviendas/las-rozas-de-madrid-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/las-rozas-de-madrid/todas-las-zonas"+FOTO_F},
+  {n:"Torrelodones", ide:"https://www.idealista.com/venta-viviendas/torrelodones-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/torrelodones/todas-las-zonas"+FOTO_F},
+  {n:"Colmenar Viejo", ide:"https://www.idealista.com/venta-viviendas/colmenar-viejo-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/colmenar-viejo/todas-las-zonas"+FOTO_F},
+  {n:"Tres Cantos", ide:"https://www.idealista.com/venta-viviendas/tres-cantos-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/tres-cantos/todas-las-zonas"+FOTO_F},
+  {n:"Soto del Real", ide:"https://www.idealista.com/venta-viviendas/soto-del-real-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/soto-del-real/todas-las-zonas"+FOTO_F},
+  {n:"Collado Mediano", ide:"https://www.idealista.com/venta-viviendas/collado-mediano-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/collado-mediano/todas-las-zonas"+FOTO_F},
+  {n:"Galapagar", ide:"https://www.idealista.com/venta-viviendas/galapagar-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/galapagar/todas-las-zonas"+FOTO_F},
+  {n:"Moralzarzal", ide:"https://www.idealista.com/venta-viviendas/moralzarzal-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/moralzarzal/todas-las-zonas"+FOTO_F},
+  {n:"Guadarrama", ide:"https://www.idealista.com/venta-viviendas/guadarrama-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/guadarrama/todas-las-zonas"+FOTO_F},
+  {n:"Becerril de la Sierra", ide:"https://www.idealista.com/venta-viviendas/becerril-de-la-sierra-madrid/con-obra-nueva"+IDE_F, foto:"https://www.fotocasa.es/es/comprar/viviendas/becerril-de-la-sierra/todas-las-zonas"+FOTO_F}
+];
+(function(){
+  const sel=document.getElementById("muni");
+  MUNIS.forEach((m,i)=>{ const o=document.createElement("option"); o.value=i; o.textContent=m.n; sel.appendChild(o); });
+  const upd=()=>{ const m=MUNIS[sel.value||0]; document.getElementById("goIde").href=m.ide; document.getElementById("goFoto").href=m.foto; };
+  sel.addEventListener("change",upd); sel.value=0; upd();
+})();
+
+document.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{ document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active")); c.classList.add("active"); filter=c.dataset.f; render(); }));
+document.getElementById("q").addEventListener("input",render);
+document.getElementById("actualizado").textContent="Actualizado: "+FECHA+" · 3+ hab · ≤ 420.000 € (sin IVA) · ⭐ ✕ 📝 y anuncios añadidos se guardan en este equipo";
+render();
+
+// Histórico de informes en PDF (se alimenta de manifest.json)
+fetch("manifest.json", {cache:"no-store"}).then(r=>r.json()).then(m=>{
+  const box=document.getElementById("pdflist"); if(!box) return; box.innerHTML="";
+  const items=(m&&m.informes)||[];
+  if(!items.length){ box.textContent="Aún no hay informes."; return; }
+  items.forEach((f,i)=>{
+    const a=document.createElement("a");
+    a.className="pbtn "+(i===0?"ide":"foto");
+    a.href="pdf/"+f.archivo; a.setAttribute("download","");
+    a.textContent=(i===0?"📄 Hoy · ":"📄 ")+f.fecha;
+    box.appendChild(a);
+  });
+}).catch(()=>{ const box=document.getElementById("pdflist"); if(box) box.textContent="No se pudo cargar la lista (esto funciona con la web ya publicada, no abriendo el archivo directamente)."; });
+</script>
+</body>
+</html>
