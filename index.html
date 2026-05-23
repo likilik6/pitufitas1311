@@ -169,6 +169,8 @@ body { margin:0; background:#eef1f6; color:#15181d; font-family:-apple-system,Se
         <h3>📄 Informes diarios en PDF</h3>
         <div id="reportbody">Cargando…</div>
       </div>
+      <button id="dlBak" style="width:100%;margin-top:10px;background:#5b2c6f;color:#fff;border:none;border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:600;cursor:pointer">💾 Descargar copia de marcadores</button>
+      <p style="font-size:10.5px;color:#88909e;margin:7px 2px 0">Tus marcadores se guardan en la nube y los veis los dos. Se conservan copias de los 10 últimos días. Con este botón puedes bajar una copia (p. ej. a OneDrive).</p>
     </aside>
   </div>
 </div>
@@ -220,7 +222,8 @@ const getArr = k => { try { return JSON.parse(localStorage.getItem(k)||"[]"); } 
 const getObj = k => { try { return JSON.parse(localStorage.getItem(k)||"{}"); } catch(e){ return {}; } };
 
 // ===== Sincronización compartida en la nube (kvdb) — datos comunes a todos los usuarios =====
-const SYNC_URL = "https://kvdb.io/9rv5pU4b2PTAcvY8scJiWa/obra-data";
+const BUCKET_BASE = "https://kvdb.io/9rv5pU4b2PTAcvY8scJiWa/";
+const SYNC_URL = BUCKET_BASE + "obra-data";
 const SYNC_KEYS = [FAV_KEY, DESC_KEY, NOTE_KEY, CUSTOM_KEY];
 let _pushT;
 function _snap(){ var o={}; SYNC_KEYS.forEach(function(k){ o[k]=localStorage.getItem(k); }); return o; }
@@ -229,6 +232,24 @@ function pushRemote(){ clearTimeout(_pushT); _pushT=setTimeout(function(){ fetch
 function pullRemote(){ return fetch(SYNC_URL,{cache:"no-store"}).then(function(r){ if(r.status===404) return {state:"empty"}; if(!r.ok) return {state:"error"}; return r.text().then(function(t){ var o; try{o=JSON.parse(t);}catch(e){return {state:"error"};} if(o&&typeof o==="object"&&Object.keys(o).length){ if(_apply(o)) render(); return {state:"applied"}; } return {state:"empty"}; }); }).catch(function(){ return {state:"error"}; }); }
 
 const setVal = (k,v) => { localStorage.setItem(k, JSON.stringify(v)); if(SYNC_KEYS.indexOf(k)>-1) pushRemote(); };
+
+// Respaldo automático: instantánea diaria en la nube, conservando las 10 últimas.
+function dailyBackup(){
+  var key = "bak-" + new Date().toISOString().slice(0,10);
+  fetch(BUCKET_BASE+key, {method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(_snap())})
+    .then(function(){ return fetch(BUCKET_BASE+"?prefix=bak-&format=json&values=false", {cache:"no-store"}); })
+    .then(function(r){ return r.ok ? r.json() : []; })
+    .then(function(keys){ if(!Array.isArray(keys)) return; keys.sort(); keys.slice(0, Math.max(0, keys.length-10)).forEach(function(k){ fetch(BUCKET_BASE+k,{method:"DELETE"}).catch(function(){}); }); })
+    .catch(function(){});
+}
+// Descargar una copia (para guardarla donde quieras, p.ej. OneDrive)
+function downloadBackup(){
+  var blob = new Blob([JSON.stringify(_snap(),null,1)], {type:"application/json"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "marcadores-" + new Date().toISOString().slice(0,10) + ".json";
+  document.body.appendChild(a); a.click(); a.remove();
+}
 function toggle(k,id){ let a=getArr(k); if(a.includes(id)) a=a.filter(x=>x!==id); else a.push(id); setVal(k,a); render(); }
 function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
 function fmtDate(iso){ if(!iso) return ""; const p=String(iso).split("-"); return p.length===3 ? (p[2]+"/"+p[1]+"/"+p[0]) : iso; }
@@ -371,7 +392,8 @@ document.getElementById("actualizado").textContent="Actualizado: "+FECHA+" · 3+
 render();
 
 // Arranque de la sincronización: baja lo guardado en la nube; si no hay nada, sube lo local.
-pullRemote().then(function(res){ if(res.state==="empty"){ var s=_snap(); if(SYNC_KEYS.some(function(k){ var v=s[k]; return v && v!=="[]" && v!=="{}"; })) pushRemote(); } });
+pullRemote().then(function(res){ if(res.state==="empty"){ var s=_snap(); if(SYNC_KEYS.some(function(k){ var v=s[k]; return v && v!=="[]" && v!=="{}"; })) pushRemote(); } dailyBackup(); });
+var _dlb=document.getElementById("dlBak"); if(_dlb) _dlb.addEventListener("click", downloadBackup);
 window.addEventListener("focus", function(){ pullRemote(); });
 document.addEventListener("visibilitychange", function(){ if(!document.hidden) pullRemote(); });
 
