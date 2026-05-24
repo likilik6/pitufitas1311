@@ -332,6 +332,7 @@ function render(){
         '<div class="tags"><span class="tag '+(d.type==="coop"?"coop":"nueva")+'">'+(d.type==="coop"?"🏢 Cooperativa":"🏠 Obra nueva")+'</span>'+
         (pl?'<span class="tag '+pc+'">'+pl+'</span>':'')+(d.mine?'<span class="tag mine">✍️ Añadido por ti</span>':'')+(d.fase&&d.fase!=="—"?'<span class="tag">'+esc(d.fase)+'</span>':'')+'</div>'+
         srcs+
+        '<div class="notedisc nd"'+(hasNote?'':' style="display:none"')+'>📝 <span class="ndtext">'+esc(notes[d.id]||"")+'</span></div>'+
         '<div class="notebox"><textarea placeholder="Escribe aquí tus comentarios sobre esta vivienda…"></textarea><div class="notesaved" style="display:none">Guardado ✓</div></div></div>';
       card.querySelector(".star").addEventListener("click",()=>toggle(FAV_KEY,d.id));
       card.querySelector(".dismiss").addEventListener("click",()=>toggle(DESC_KEY,d.id));
@@ -339,7 +340,7 @@ function render(){
       const nb=card.querySelector(".notebox"), ta=nb.querySelector("textarea"), saved=nb.querySelector(".notesaved");
       ta.value = notes[d.id]||"";
       card.querySelector(".note").addEventListener("click",()=>{ nb.classList.toggle("open"); if(nb.classList.contains("open")) ta.focus(); });
-      let t; ta.addEventListener("input",()=>{ const o=getObj(NOTE_KEY); o[d.id]=ta.value; setVal(NOTE_KEY,o); card.querySelector(".note").classList.toggle("has", !!ta.value.trim()); saved.style.display="block"; clearTimeout(t); t=setTimeout(()=>saved.style.display="none",1200); });
+      let t; ta.addEventListener("input",()=>{ const o=getObj(NOTE_KEY); o[d.id]=ta.value; setVal(NOTE_KEY,o); card.querySelector(".note").classList.toggle("has", !!ta.value.trim()); var _nd=card.querySelector(".nd"), _ndt=card.querySelector(".ndtext"); if(_ndt) _ndt.textContent=ta.value; if(_nd) _nd.style.display=ta.value.trim()?"":"none"; saved.style.display="block"; clearTimeout(t); t=setTimeout(()=>saved.style.display="none",1200); });
     }
     list.appendChild(card);
   }
