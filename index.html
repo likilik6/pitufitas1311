@@ -174,6 +174,8 @@ body { margin:0; background:#eef1f6; color:#15181d; font-family:-apple-system,Se
       </div>
       <button id="dlBak" style="width:100%;margin-top:10px;background:#5b2c6f;color:#fff;border:none;border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:600;cursor:pointer">💾 Descargar copia de marcadores</button>
       <p style="font-size:10.5px;color:#88909e;margin:7px 2px 0">Tus marcadores se guardan en la nube y los veis los dos. Se conservan copias de los 10 últimos días. Con este botón puedes bajar una copia (p. ej. a OneDrive).</p>
+      <button id="syncNow" style="width:100%;margin-top:8px;background:#1565c0;color:#fff;border:none;border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:600;cursor:pointer">🔄 Actualizar desde la nube</button>
+      <p id="syncStatus" style="font-size:11px;color:#88909e;margin:7px 2px 0;text-align:center">Nube: comprobando…</p>
     </aside>
   </div>
 </div>
@@ -235,8 +237,8 @@ const SYNC_KEYS = [FAV_KEY, DESC_KEY, NOTE_KEY, CUSTOM_KEY];
 let _pushT;
 function _snap(){ var o={}; SYNC_KEYS.forEach(function(k){ o[k]=localStorage.getItem(k); }); return o; }
 function _apply(o){ var ch=false; SYNC_KEYS.forEach(function(k){ var v=(o[k]==null?null:o[k]); var cur=localStorage.getItem(k); if(v!==cur){ if(v==null) localStorage.removeItem(k); else localStorage.setItem(k,v); ch=true; } }); return ch; }
-function pushRemote(){ clearTimeout(_pushT); _pushT=setTimeout(function(){ fetch(SYNC_URL,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(_snap())}).catch(function(){}); }, 700); }
-function pullRemote(){ return fetch(SYNC_URL,{cache:"no-store"}).then(function(r){ if(r.status===404) return {state:"empty"}; if(!r.ok) return {state:"error"}; return r.text().then(function(t){ var o; try{o=JSON.parse(t);}catch(e){return {state:"error"};} if(o&&typeof o==="object"&&Object.keys(o).length){ if(_apply(o)) render(); return {state:"applied"}; } return {state:"empty"}; }); }).catch(function(){ return {state:"error"}; }); }
+function pushRemote(){ clearTimeout(_pushT); _pushT=setTimeout(function(){ setSync("guardando…"); fetch(SYNC_URL,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(_snap())}).then(function(r){ setSync(r.ok?"✓ guardado en la nube":"⚠ error al guardar ("+r.status+")"); }).catch(function(){ setSync("⚠ sin conexión al guardar"); }); }, 700); }
+function pullRemote(){ return fetch(SYNC_URL+"?t="+Date.now(),{cache:"no-store"}).then(function(r){ if(r.status===404) return {state:"empty"}; if(!r.ok) return {state:"error"}; return r.text().then(function(t){ var o; try{o=JSON.parse(t);}catch(e){return {state:"error"};} if(o&&typeof o==="object"&&Object.keys(o).length){ if(_apply(o)) render(); return {state:"applied"}; } return {state:"empty"}; }); }).catch(function(){ return {state:"error"}; }); }
 
 const setVal = (k,v) => { localStorage.setItem(k, JSON.stringify(v)); if(SYNC_KEYS.indexOf(k)>-1) pushRemote(); };
 
@@ -402,8 +404,10 @@ document.getElementById("actualizado").textContent="Actualizado: "+FECHA+" · 3+
 render();
 
 // Arranque de la sincronización: baja lo guardado en la nube; si no hay nada, sube lo local.
-pullRemote().then(function(res){ if(res.state==="empty"){ var s=_snap(); if(SYNC_KEYS.some(function(k){ var v=s[k]; return v && v!=="[]" && v!=="{}"; })) pushRemote(); } dailyBackup(); });
+pullRemote().then(function(res){ if(res.state==="empty"){ var s=_snap(); if(SYNC_KEYS.some(function(k){ var v=s[k]; return v && v!=="[]" && v!=="{}"; })){ pushRemote(); } else { setSync("sin datos compartidos todavía"); } } else if(res.state==="applied"){ setSync("✓ sincronizado con la nube"); } else { setSync("⚠ sin conexión con la nube"); } dailyBackup(); });
+function setSync(t){ var e=document.getElementById("syncStatus"); if(e) e.textContent="Nube: "+t; }
 var _dlb=document.getElementById("dlBak"); if(_dlb) _dlb.addEventListener("click", downloadBackup);
+var _sn=document.getElementById("syncNow"); if(_sn) _sn.addEventListener("click", function(){ setSync("actualizando…"); pullRemote().then(function(r){ setSync(r.state==="applied"?"✓ actualizado con lo de la nube":r.state==="empty"?"sin datos en la nube todavía":"⚠ sin conexión"); }); });
 window.addEventListener("focus", function(){ pullRemote(); });
 document.addEventListener("visibilitychange", function(){ if(!document.hidden) pullRemote(); });
 
