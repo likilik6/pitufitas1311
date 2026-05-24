@@ -120,6 +120,7 @@ body { margin:0; background:#eef1f6; color:#15181d; font-family:-apple-system,Se
 
       <div class="stats">
         <div class="stat" data-f="todas"><b id="s-total">0</b><span>oportunidades</span></div>
+        <div class="stat" data-f="hoy"><b id="s-hoy">0</b><span>🆕 nuevas hoy</span></div>
         <div class="stat" data-f="fav"><b id="s-fav">0</b><span>⭐ favoritas</span></div>
         <div class="stat" data-f="coop"><b id="s-coop">0</b><span>cooperativas</span></div>
         <div class="stat" data-f="mine"><b id="s-mine">0</b><span>✍️ tuyas</span></div>
@@ -128,6 +129,7 @@ body { margin:0; background:#eef1f6; color:#15181d; font-family:-apple-system,Se
 
       <div class="toolbar">
         <span class="chip active" data-f="todas">Todas</span>
+        <span class="chip" data-f="hoy">🆕 Nuevas de hoy</span>
         <span class="chip" data-f="fav">⭐ Favoritas</span>
         <span class="chip" data-f="coop">🏢 Cooperativas</span>
         <span class="chip" data-f="nueva">🏠 Obra nueva</span>
@@ -275,6 +277,7 @@ function render(){
 
   const oport=all.filter(d=>d.type!=="buscar" && !desc.includes(d.id));
   document.getElementById("s-total").textContent=oport.length;
+  document.getElementById("s-hoy").textContent=oport.filter(d=>d.alta===FECHA_ISO).length;
   document.getElementById("s-fav").textContent=oport.filter(d=>favs.includes(d.id)).length;
   document.getElementById("s-coop").textContent=oport.filter(d=>d.type==="coop").length;
   document.getElementById("s-mine").textContent=oport.filter(d=>d.mine).length;
@@ -284,7 +287,8 @@ function render(){
   if(showingDiscarded) items=all.filter(d=>desc.includes(d.id)&&d.type!=="buscar");
   else if(filter==="buscar") items=DATA.filter(d=>d.type==="buscar");
   else { items=oport.slice();
-    if(filter==="fav") items=items.filter(d=>favs.includes(d.id));
+    if(filter==="hoy") items=items.filter(d=>d.alta===FECHA_ISO);
+    else if(filter==="fav") items=items.filter(d=>favs.includes(d.id));
     else if(filter==="coop") items=items.filter(d=>d.type==="coop");
     else if(filter==="nueva") items=items.filter(d=>d.type==="nueva");
     else if(filter==="mine") items=items.filter(d=>d.mine);
