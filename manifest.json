@@ -1,6 +1,11 @@
 {
   "informes": [
     {
+      "fecha": "01/06/2026",
+      "archivo": "obra-nueva-madrid-2026-06-01.pdf",
+      "resumen": "3 novedades dentro de presupuesto: 🆕 Parque de los Robles (Bodemhaus, SSR Cerro del Baile, cooperativa VPPL 2-3 dorm desde 315.000 €), 🆕 Víve Cerro del Baile (Libra/Víveme, SSR, cooperativa VPPL 2-3 dorm desde 369.463 €, entrega 2030) y 🆕 Parque de los Frailes (Colmenar Viejo/Pozanco, cooperativa renta libre, 25 viv 3 dorm, precio por confirmar). Avisos de conteo Idealista: 📈 Colmenar Viejo 20→21, 📈 Tres Cantos 6→7. Zonas prioritarias estables (Villalba 4, Madrid Nuevo Norte 6). Noticias: Las Tablas Oeste sigue demoliendo; Crea MNN subastará suelos residenciales a finales 2026; Plan Vive Solución Joven adjudica 3.352 viv (756 Alcobendas, 332 Colmenar, 303 Tres Cantos); Carriles-Valgrande Alcobendas (8.600 viv) inicia trabajos."
+    },
+    {
       "fecha": "31/05/2026",
       "archivo": "obra-nueva-madrid-2026-05-31.pdf",
       "resumen": "Sin novedades dentro de presupuesto. 16 promociones en seguimiento (8 cooperativas) reconfirmadas disponibles; ninguna retirada por venta (AEDAS Orbia con stock, MARPY Tres Hermanas en últimas viviendas, Habitat Las Eras y Habitat Villalba, Vive Villalba y Energy House de AUNA, Los Trigales Antaro/InMountain, Green Path Castrum, ColmenarStyle, Edificio Huertas/Ksanet, etc.). Conteos Idealista estables en todos los municipios (Villalba 4, Madrid Nuevo Norte 6, Colmenar 20, Galapagar 8, Becerril 9, etc.); sin avisos 📈. Noticias: Las Tablas Oeste continúa la demolición sobre 113.725 m² (~6 meses, hasta noviembre, 76% del material reutilizable); LACOOOP/CooperOpen mantienen captación abierta para Madrid Nuevo Norte y Alcobendas; Aedas, Metrovacesa, Pryconsa, Ibosa y Gestilar concentran >56% de las 45.161 viviendas previstas en Madrid (2024-2026)."
@@ -33,17 +38,4 @@
     {
       "fecha": "24/05/2026",
       "archivo": "obra-nueva-madrid-2026-05-24.pdf",
-      "resumen": "Novedad: Cooperativa Collado Villalba (C/ San José 43, CooperOpen/CONCOVI) abre captación a precio de coste en zona prioritaria. 17 oportunidades en seguimiento, 8 cooperativas. Zonas prioritarias estables; aviso menor: Colmenar Viejo 20→21 obra nueva. Noticias: avance de obras de Las Tablas Oeste (Madrid Nuevo Norte) y plan de Grupo Ibosa de 3.000 viviendas en cooperativa."
-    },
-    {
-      "fecha": "23/05/2026",
-      "archivo": "obra-nueva-madrid-2026-05-23.pdf",
-      "resumen": "Novedad: Cooperativa Vive Villalba (AUNA, Collado Villalba, precio coste desde 249.500 €, junto a Renfe). Sigue disponible Tres Hermanas (MARPY). 16 oportunidades en seguimiento, 7 cooperativas. Sin subidas de conteo. Noticias: obras de Las Tablas Oeste (Madrid Nuevo Norte) en marcha; Puerta de Villalba (chalets) excluida por precio (>600.000 €)."
-    },
-    {
-      "fecha": "22/05/2026",
-      "archivo": "obra-nueva-madrid-2026-05-22.pdf",
-      "resumen": "Primer informe: 12 oportunidades dentro de presupuesto en Collado Villalba, S.S. Reyes, Colmenar y Alcobendas, incluyendo 7 cooperativas."
-    }
-  ]
-}
+      "resumen": "Novedad: Cooperativa Collado Villalba (C/ San José 43, CooperOpen/CONCOVI) abre captación a precio de coste en zona prioritaria. 17 oportunidades en seguimiento, 8 cooperativas. Zonas prioritarias estables; aviso menor: Colmenar Vie

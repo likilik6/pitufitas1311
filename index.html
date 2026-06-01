@@ -181,7 +181,7 @@ body { margin:0; background:#eef1f6; color:#15181d; font-family:-apple-system,Se
 </div>
 
 <script>
-const FECHA = "31/05/2026";
+const FECHA = "01/06/2026";
 const DATA = [
   {id:"https://cooperopen.org/zona-collado-villalba/", name:"Cooperativa Collado Villalba · C/ San José 43", type:"coop", zona:"Collado Villalba", precio:"por confirmar (precio de coste)", dorm:"por confirmar", promotora:"CooperOpen / CONCOVI", fase:"Cooperativa a precio de coste · en captación de interesados", pres:"pc", alta:"2026-05-24",
     links:[{w:"CooperOpen (ficha)",u:"https://cooperopen.org/zona-collado-villalba/"}]},
@@ -217,6 +217,12 @@ const DATA = [
     links:[{w:"Gestora (ficha)",u:"https://comunidadessantagema.com/altos_de_villalba/"}]},
   {id:"https://lacooop.com/marketplace/obra-nueva/madrid/", name:"Cooperativas en captación (portal)", type:"coop", zona:"SSR · Alcobendas · Villalba · Galapagar", precio:"en captación", dorm:"—", promotora:"LACOOOP", fase:"Portal de captación · no es ficha única", pres:"pc", alta:"2026-05-22",
     links:[{w:"LACOOOP (portal)",u:"https://lacooop.com/"},{w:"LACOOOP · Valgrande",u:"https://lacooop.com/marketplace/promocion/proximos-lanzamientos-en-valgrande"}]},
+  {id:"https://bodemhausviviendas.com/parque-de-los-robles-cerro-del-baile/", name:"Residencial Parque de los Robles", type:"coop", zona:"San Sebastián de los Reyes (Cerro del Baile)", precio:"desde 315.000 €", dorm:"2-3 dorm", promotora:"Bodemhaus Viviendas", fase:"Cooperativa VPPL · 80 viv · 2 plazas garaje + trastero · piscina · en captación", pres:"dentro", alta:"2026-06-01",
+    links:[{w:"Bodemhaus (ficha)",u:"https://bodemhausviviendas.com/parque-de-los-robles-cerro-del-baile/"}]},
+  {id:"https://libragp.com/promociones/cerro-del-baile/", name:"Víve Cerro del Baile", type:"coop", zona:"San Sebastián de los Reyes (Cerro del Baile)", precio:"desde 369.463 €", dorm:"2-3 dorm", promotora:"Libra / Víveme", fase:"Cooperativa VPPL · 80 viv · garaje+trastero · entrega 2030", pres:"dentro", alta:"2026-06-01",
+    links:[{w:"Libra (ficha)",u:"https://libragp.com/promociones/cerro-del-baile/"},{w:"Víveme",u:"https://www.viveme.es/promociones-viviendas-en-venta/madrid/vive-cerro-del-baile"}]},
+  {id:"https://pisoscolmenarviejo.com/", name:"Residencial Parque de los Frailes", type:"coop", zona:"Colmenar Viejo (Pozanco)", precio:"por confirmar (renta libre)", dorm:"3 dorm", promotora:"—", fase:"Cooperativa renta libre · 25 viv 3 dorm · piscina · bajos con jardín", pres:"pc", alta:"2026-06-01",
+    links:[{w:"PisosColmenarViejo (ficha)",u:"https://pisoscolmenarviejo.com/"},{w:"InmoFind",u:"https://spain.inmofind.com/residencial-parque-de-los-frailes-en-colmenar-viejo"}]},
   {id:"https://www.idealista.com/venta-viviendas/alcobendas-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · Alcobendas", type:"buscar", zona:"Alcobendas", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
   {id:"https://www.idealista.com/venta-viviendas/san-sebastian-de-los-reyes-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · San Sebastián de los Reyes", type:"buscar", zona:"San Sebastián de los Reyes", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
   {id:"https://www.idealista.com/venta-viviendas/las-rozas-de-madrid-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · Las Rozas", type:"buscar", zona:"Las Rozas", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
@@ -403,6 +409,9 @@ document.getElementById("q").addEventListener("input",render);
 document.getElementById("sort").addEventListener("change",e=>{ sortMode=e.target.value; render(); });
 document.getElementById("actualizado").textContent="Actualizado: "+FECHA+" · 3+ hab · ≤ 420.000 € (sin IVA) · ⭐ ✕ 📝 y anuncios añadidos se guardan en este navegador";
 render();
+
+// Arranque de la sincronización: baja lo guardado en la nube; si no hay nada, sube lo local.
+pullRemote().then(function(res){ if(res.state==="empty"){ var s=_snap(); if(SYNC_KEYS.some(function(k){ var v=s[k]; return v && v!=="[]" && v!=="{}"; })){ pushRemote(); } else { setSync("sin datos compartidos todavía"); } } else if(res.state==="applied"){ setSync("✓ sincronizado con la nube"); } else { setSync("⚠ sin conexión con la nube"); } dailyBackup(); });
 
 // Arranque de la sincronización: baja lo guardado en la nube; si no hay nada, sube lo local.
 pullRemote().then(function(res){ if(res.state==="empty"){ var s=_snap(); if(SYNC_KEYS.some(function(k){ var v=s[k]; return v && v!=="[]" && v!=="{}"; })){ pushRemote(); } else { setSync("sin datos compartidos todavía"); } } else if(res.state==="applied"){ setSync("✓ sincronizado con la nube"); } else { setSync("⚠ sin conexión con la nube"); } dailyBackup(); });
