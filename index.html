@@ -181,14 +181,12 @@ body { margin:0; background:#eef1f6; color:#15181d; font-family:-apple-system,Se
 </div>
 
 <script>
-const FECHA = "04/06/2026";
+const FECHA = "05/06/2026";
 const DATA = [
   {id:"https://cooperopen.org/zona-collado-villalba/", name:"Cooperativa Collado Villalba · C/ San José 43", type:"coop", zona:"Collado Villalba", precio:"por confirmar (precio de coste)", dorm:"por confirmar", promotora:"CooperOpen / CONCOVI", fase:"Cooperativa a precio de coste · en captación de interesados", pres:"pc", alta:"2026-05-24",
     links:[{w:"CooperOpen (ficha)",u:"https://cooperopen.org/zona-collado-villalba/"}]},
   {id:"https://www.idealista.com/inmueble/111541492/", name:"Anuncio Idealista · ref. 111541492", type:"nueva", zona:"(por confirmar)", precio:"ver ficha", dorm:"", promotora:"", fase:"Añadido desde alerta de Idealista — completa precio/zona", pres:"pc", alta:"2026-05-23",
     links:[{w:"Idealista (ficha)",u:"https://www.idealista.com/inmueble/111541492/"}]},
-  {id:"https://antaro.es/promociones/los-trigales/", name:"Los Trigales de Becerril", type:"coop", zona:"Becerril de la Sierra", precio:"3 dorm (Modelo A) 398.000–418.000 €", dorm:"3 dorm · 151 m² (pareado)", promotora:"InMountain / Antaro", fase:"25 viv · cooperativa · piscina · entrega 2027 · últimas unidades", pres:"dentro", alta:"2026-05-23",
-    links:[{w:"Antaro (ficha)",u:"https://antaro.es/promociones/los-trigales/"},{w:"InMountain",u:"https://inmountain.es/promociones"},{w:"Idealista (ficha)",u:"https://www.idealista.com/obra-nueva/106876946/"},{w:"Estatenearme",u:"https://spain.estatenearme.com/es/madrid/city/becerril-de-la-sierra/sale/complexes/property/los-trigales-de-becerril-de-la-sierra"}]},
   {id:"https://www.somosmarpy.com/hermanas/", name:"Residencial Tres Hermanas", type:"nueva", zona:"Collado Villalba", precio:"3 dorm desde 171.700 €", dorm:"1-3 dorm", promotora:"MARPY", fase:"16 viv · garaje incluido · aerotermia · obras iniciadas · últimas unidades", pres:"dentro", alta:"2026-05-23",
     links:[{w:"Estatenearme (ficha)",u:"https://spain.estatenearme.com/residencial-edificio-tres-hermanas-en-collado-villalba"},{w:"Idealista (Villalba)",u:"https://www.idealista.com/venta-viviendas/collado-villalba-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/"}]},
   {id:"https://www.aedashomes.com/pisos-en-venta-en-collado-villalba-obra-nueva-orbia", name:"Orbia", type:"nueva", zona:"Collado Villalba", precio:"3 dorm desde 251.500 €", dorm:"1-3 dorm", promotora:"AEDAS Homes", fase:"96 viv · garaje+trastero · piscina · junto a Cercanías", pres:"dentro", alta:"2026-05-22",
@@ -221,6 +219,8 @@ const DATA = [
     links:[{w:"Bodemhaus (ficha)",u:"https://bodemhausviviendas.com/parque-de-los-robles-cerro-del-baile/"}]},
   {id:"https://libragp.com/promociones/cerro-del-baile/", name:"Víve Cerro del Baile", type:"coop", zona:"San Sebastián de los Reyes (Cerro del Baile)", precio:"desde 369.463 €", dorm:"2-3 dorm", promotora:"Libra / Víveme", fase:"Cooperativa VPPL · 80 viv · garaje+trastero · entrega 2030", pres:"dentro", alta:"2026-06-01",
     links:[{w:"Libra (ficha)",u:"https://libragp.com/promociones/cerro-del-baile/"},{w:"Víveme",u:"https://www.viveme.es/promociones-viviendas-en-venta/madrid/vive-cerro-del-baile"}]},
+  {id:"https://inmotroya.com/inmuebles/piso/madrid/obra-nueva-residencial-ermita-7-y-15/", name:"Cooperativa Residencial Ermita 7 y 15", type:"coop", zona:"Collado Mediano", precio:"por confirmar (precio de coste)", dorm:"2-3 dorm · 63-91 m²", promotora:"Troya Servicios Inmobiliarios", fase:"Cooperativa renta libre · Passivhaus · garaje+trastero · entrega ~24 meses · en comercialización", pres:"pc", alta:"2026-06-05",
+    links:[{w:"Troya (ficha)",u:"https://inmotroya.com/inmuebles/piso/madrid/obra-nueva-residencial-ermita-7-y-15/"},{w:"EstateNearMe",u:"https://spain.estatenearme.com/residencial-residencial-ermita-en-collado-mediano"},{w:"Idealista (ficha)",u:"https://www.idealista.com/en/obra-nueva/104106290/"}]},
   {id:"https://www.idealista.com/venta-viviendas/alcobendas-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · Alcobendas", type:"buscar", zona:"Alcobendas", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
   {id:"https://www.idealista.com/venta-viviendas/san-sebastian-de-los-reyes-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · San Sebastián de los Reyes", type:"buscar", zona:"San Sebastián de los Reyes", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
   {id:"https://www.idealista.com/venta-viviendas/las-rozas-de-madrid-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · Las Rozas", type:"buscar", zona:"Las Rozas", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
