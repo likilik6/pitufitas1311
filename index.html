@@ -181,7 +181,7 @@ body { margin:0; background:#eef1f6; color:#15181d; font-family:-apple-system,Se
 </div>
 
 <script>
-const FECHA = "09/06/2026";
+const FECHA = "10/06/2026";
 const DATA = [
   {id:"https://cooperopen.org/zona-collado-villalba/", name:"Cooperativa Collado Villalba · C/ San José 43", type:"coop", zona:"Collado Villalba", precio:"por confirmar (precio de coste)", dorm:"por confirmar", promotora:"CooperOpen / CONCOVI", fase:"Cooperativa a precio de coste · en captación de interesados", pres:"pc", alta:"2026-05-24",
     links:[{w:"CooperOpen (ficha)",u:"https://cooperopen.org/zona-collado-villalba/"}]},
@@ -221,6 +221,8 @@ const DATA = [
     links:[{w:"Libra (ficha)",u:"https://libragp.com/promociones/cerro-del-baile/"},{w:"Víveme",u:"https://www.viveme.es/promociones-viviendas-en-venta/madrid/vive-cerro-del-baile"}]},
   {id:"https://inmotroya.com/inmuebles/piso/madrid/obra-nueva-residencial-ermita-7-y-15/", name:"Cooperativa Residencial Ermita 7 y 15", type:"coop", zona:"Collado Mediano", precio:"por confirmar (precio de coste)", dorm:"2-3 dorm · 63-91 m²", promotora:"Troya Servicios Inmobiliarios", fase:"Cooperativa renta libre · Passivhaus · garaje+trastero · entrega ~24 meses · en comercialización", pres:"pc", alta:"2026-06-05",
     links:[{w:"Troya (ficha)",u:"https://inmotroya.com/inmuebles/piso/madrid/obra-nueva-residencial-ermita-7-y-15/"},{w:"EstateNearMe",u:"https://spain.estatenearme.com/residencial-residencial-ermita-en-collado-mediano"},{w:"Idealista (ficha)",u:"https://www.idealista.com/en/obra-nueva/104106290/"}]},
+  {id:"https://galivivienda.com/helia-valgrade-alcobendas/", name:"Cooperativa Helia Valgrande", type:"coop", zona:"Alcobendas (Valgrande)", precio:"por confirmar (VPPL, precio de coste)", dorm:"2-3 dorm · 3 dorm ~103-118 m²", promotora:"Galivivienda", fase:"Cooperativa VPPL a precio de coste · 127 viv en 4 edificios · 2 plazas garaje+trastero · piscina, gimnasio, sala gourmet · en selección y reserva", pres:"pc", alta:"2026-06-10",
+    links:[{w:"Galivivienda (ficha)",u:"https://galivivienda.com/helia-valgrade-alcobendas/"},{w:"Foroconsultores",u:"https://www.foroconsultores.com/pisos-en-venta/valgrande-helia/79949"},{w:"LACOOOP (Valgrande)",u:"https://lacooop.com/blog/viviendas-valgrande-alcobendas"}]},
   {id:"https://www.idealista.com/venta-viviendas/alcobendas-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · Alcobendas", type:"buscar", zona:"Alcobendas", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
   {id:"https://www.idealista.com/venta-viviendas/san-sebastian-de-los-reyes-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · San Sebastián de los Reyes", type:"buscar", zona:"San Sebastián de los Reyes", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
   {id:"https://www.idealista.com/venta-viviendas/las-rozas-de-madrid-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/", name:"Idealista · Las Rozas", type:"buscar", zona:"Las Rozas", precio:"resultados filtrados", dorm:"3+ dorm ≤420k", promotora:"", fase:"", pres:"bus"},
@@ -422,18 +424,4 @@ document.addEventListener("visibilitychange", function(){ if(!document.hidden) p
 // Panel derecho: informes en PDF + resumen del último
 fetch("manifest.json", {cache:"no-store"}).then(r=>r.json()).then(m=>{
   const el=document.getElementById("reportbody"); if(!el) return;
-  const it=(m&&m.informes)||[];
-  if(!it.length){ el.textContent="Aún no hay informes."; return; }
-  const latest=it[0];
-  let html='<a class="dl" href="pdf/'+esc(latest.archivo)+'" download>⬇️ Informe de hoy · '+esc(latest.fecha)+'</a>';
-  if(latest.resumen) html+='<div class="resumen">'+esc(latest.resumen)+'</div>';
-  if(it.length>1){
-    html+='<p class="hist">Informes anteriores</p><div class="histlist">';
-    it.slice(1).forEach(f=>{ html+='<a href="pdf/'+esc(f.archivo)+'" download>📄 '+esc(f.fecha)+'</a>'; });
-    html+='</div>';
-  }
-  el.innerHTML=html;
-}).catch(()=>{ const el=document.getElementById("reportbody"); if(el) el.textContent="No se pudo cargar (funciona con la web ya publicada)."; });
-</script>
-</body>
-</html>
+  const it=(m&&m.informes
