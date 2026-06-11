@@ -181,7 +181,7 @@ body { margin:0; background:#eef1f6; color:#15181d; font-family:-apple-system,Se
 </div>
 
 <script>
-const FECHA = "10/06/2026";
+const FECHA = "11/06/2026";
 const DATA = [
   {id:"https://cooperopen.org/zona-collado-villalba/", name:"Cooperativa Collado Villalba · C/ San José 43", type:"coop", zona:"Collado Villalba", precio:"por confirmar (precio de coste)", dorm:"por confirmar", promotora:"CooperOpen / CONCOVI", fase:"Cooperativa a precio de coste · en captación de interesados", pres:"pc", alta:"2026-05-24",
     links:[{w:"CooperOpen (ficha)",u:"https://cooperopen.org/zona-collado-villalba/"}]},
@@ -189,8 +189,6 @@ const DATA = [
     links:[{w:"Idealista (ficha)",u:"https://www.idealista.com/inmueble/111541492/"}]},
   {id:"https://www.somosmarpy.com/hermanas/", name:"Residencial Tres Hermanas", type:"nueva", zona:"Collado Villalba", precio:"3 dorm desde 171.700 €", dorm:"1-3 dorm", promotora:"MARPY", fase:"16 viv · garaje incluido · aerotermia · obras iniciadas · últimas unidades", pres:"dentro", alta:"2026-05-23",
     links:[{w:"Estatenearme (ficha)",u:"https://spain.estatenearme.com/residencial-edificio-tres-hermanas-en-collado-villalba"},{w:"Idealista (Villalba)",u:"https://www.idealista.com/venta-viviendas/collado-villalba-madrid/con-obra-nueva,precio-hasta_420000,de-tres-dormitorios/"}]},
-  {id:"https://www.aedashomes.com/pisos-en-venta-en-collado-villalba-obra-nueva-orbia", name:"Orbia", type:"nueva", zona:"Collado Villalba", precio:"3 dorm desde 251.500 €", dorm:"1-3 dorm", promotora:"AEDAS Homes", fase:"96 viv · garaje+trastero · piscina · junto a Cercanías", pres:"dentro", alta:"2026-05-22",
-    links:[{w:"AEDAS (ficha)",u:"https://www.aedashomes.com/pisos-en-venta-en-collado-villalba-obra-nueva-orbia"},{w:"Idealista (obra nueva Villalba)",u:"https://www.idealista.com/en/venta-obranueva/collado-villalba-madrid/"},{w:"Yaencontre",u:"https://www.yaencontre.com/venta/obra-nueva/collado-villalba"}]},
   {id:"https://www.habitatinmobiliaria.com/promociones/madrid/habitat-las-eras/", name:"Habitat Las Eras", type:"nueva", zona:"Collado Villalba", precio:"desde ~330.000 €", dorm:"3-4 dorm", promotora:"Habitat Inmobiliaria", fase:"72 viv · terrazas · piscina · obras iniciadas", pres:"dentro", alta:"2026-05-22",
     links:[{w:"Habitat (ficha)",u:"https://www.habitatinmobiliaria.com/promociones/madrid/habitat-las-eras/"},{w:"Brains RE (noticia)",u:"https://brainsre.news/habitat-obras-residencial-collado-villalba-17millones/"},{w:"Estudio arquitectura",u:"https://canoyescario.es/habitat-las-eras/"}]},
   {id:"https://viviendasnuevas.com/madrid/san-sebastian-de-los-reyes/promociones/", name:"C/ Santa Teresa de Jesús", type:"nueva", zona:"San Sebastián de los Reyes", precio:"desde 348.500 €", dorm:"2-3 dorm", promotora:"—", fase:"Entrega Q1 2026 · aerotermia", pres:"dentro", alta:"2026-05-22",
@@ -424,4 +422,18 @@ document.addEventListener("visibilitychange", function(){ if(!document.hidden) p
 // Panel derecho: informes en PDF + resumen del último
 fetch("manifest.json", {cache:"no-store"}).then(r=>r.json()).then(m=>{
   const el=document.getElementById("reportbody"); if(!el) return;
-  const it=(m&&m.informes
+  const it=(m&&m.informes)||[];
+  if(!it.length){ el.textContent="Aún no hay informes."; return; }
+  const latest=it[0];
+  let html='<a class="dl" href="pdf/'+esc(latest.archivo)+'" download>⬇️ Informe de hoy · '+esc(latest.fecha)+'</a>';
+  if(latest.resumen) html+='<div class="resumen">'+esc(latest.resumen)+'</div>';
+  if(it.length>1){
+    html+='<p class="hist">Informes anteriores</p><div class="histlist">';
+    it.slice(1).forEach(f=>{ html+='<a href="pdf/'+esc(f.archivo)+'" download>📄 '+esc(f.fecha)+'</a>'; });
+    html+='</div>';
+  }
+  el.innerHTML=html;
+}).catch(()=>{ const el=document.getElementById("reportbody"); if(el) el.textContent="No se pudo cargar (funciona con la web ya publicada)."; });
+</script>
+</body>
+</html>
