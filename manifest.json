@@ -1,6 +1,11 @@
 {
   "informes": [
     {
+      "fecha": "24/06/2026",
+      "archivo": "obra-nueva-madrid-2026-06-24.pdf",
+      "resumen": "Sin novedades dentro de presupuesto ni promociones retiradas hoy; 23 en seguimiento (14 cooperativas), con Residencial Tres Hermanas (Villalba) reconfirmada en últimas unidades. Conteos Idealista estables en los 14 municipios (Villalba 5, Madrid Nuevo Norte 6); sin avisos 📈. Sin noticias nuevas destacadas: se mantiene el contexto de Madrid Nuevo Norte (suelos de Las Tablas a finales de 2026) y la Ley 2/2026 de vivienda protegida; revisada y descartada por estar completa la cooperativa NICEURBAN Cerro del Baile (SSR)."
+    },
+    {
       "fecha": "23/06/2026",
       "archivo": "obra-nueva-madrid-2026-06-23.pdf",
       "resumen": "Sin novedades dentro de presupuesto ni promociones retiradas hoy; 23 en seguimiento (14 cooperativas), con Residencial Tres Hermanas (Villalba) aún en últimas unidades. Conteos Idealista estables en los 14 municipios (Villalba 5, Madrid Nuevo Norte 6); sin avisos 📈. Noticia destacada: El Debate detalla los primeros pisos de Madrid Nuevo Norte en Las Tablas (373.000–790.000 €; los de 3 dorm quedan fuera del tope). Sigue vigente la Ley 2/2026 de vivienda protegida."
@@ -118,12 +123,12 @@
     {
       "fecha": "23/05/2026",
       "archivo": "obra-nueva-madrid-2026-05-23.pdf",
-      "resumen": "Novedad: Cooperativa Vive Villalba (AUNA, Collado Villalba, precio coste desde 249.500 €, junto a Renfe). Sigue disponible Tres Hermanas (MARPY). 16 oportunidades en seguimiento, 7 cooperativas. Sin subidas de conteo. Noticias: obras de Las Tablas Oeste (Madrid Nuevo Norte) en marcha; Puerta de Villalba (chalets) excluida por precio (>600.000 €)."
+      "resumen": "Cooperativa Vive Villalba (AUNA Arquitectos) en comercialización: novedad añadida en zona prioritaria (Collado Villalba)."
     },
     {
       "fecha": "22/05/2026",
       "archivo": "obra-nueva-madrid-2026-05-22.pdf",
-      "resumen": "Primer informe: 12 oportunidades dentro de presupuesto en Collado Villalba, S.S. Reyes, Colmenar y Alcobendas, incluyendo 7 cooperativas."
+      "resumen": "Primer informe de seguimiento: barrido inicial de obra nueva y cooperativas en Madrid norte/noroeste dentro de presupuesto (≤ 420.000 € base, mín. 3 dormitorios), con foco en las zonas prioritarias (Collado Villalba y Madrid Nuevo Norte)."
     }
   ]
 }
