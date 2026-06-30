@@ -181,8 +181,10 @@ body { margin:0; background:#eef1f6; color:#15181d; font-family:-apple-system,Se
 </div>
 
 <script>
-const FECHA = "29/06/2026";
+const FECHA = "30/06/2026";
 const DATA = [
+  {id:"https://www.aelca.es/es/proyectos/anzale-colmenar/", name:"Anzale Colmenar", type:"nueva", zona:"Colmenar Viejo", precio:"3 dorm (bajo c/jardín 135,89 m²) desde 390.000 €+IVA (≈429.000 € c/IVA)", dorm:"2-4 dorm", promotora:"Aelca", fase:"31 viv · pisos, bajos con jardín y áticos · garaje+trastero · piscina · aerotermia+suelo radiante · obras iniciadas · entrega T4 2026", pres:"dentro", alta:"2026-06-30",
+    links:[{w:"Aelca (ficha)",u:"https://www.aelca.es/es/proyectos/anzale-colmenar/"},{w:"Aelca (precios)",u:"https://www.aelca.es/es/proyectos/anzale-colmenar/precios/"},{w:"CCI (portal)",u:"https://cci10.com/portal/promocion/anzale-colmenar/CCI-022-000049366"}]},
   {id:"https://cooperopen.org/zona-collado-villalba/", name:"Cooperativa Collado Villalba · C/ San José 43", type:"coop", zona:"Collado Villalba", precio:"por confirmar (precio de coste)", dorm:"por confirmar", promotora:"CooperOpen / CONCOVI", fase:"Cooperativa a precio de coste · en captación de interesados", pres:"pc", alta:"2026-05-24",
     links:[{w:"CooperOpen (ficha)",u:"https://cooperopen.org/zona-collado-villalba/"}]},
   {id:"https://www.idealista.com/inmueble/111541492/", name:"Anuncio Idealista · ref. 111541492", type:"nueva", zona:"(por confirmar)", precio:"ver ficha", dorm:"", promotora:"", fase:"Añadido desde alerta de Idealista — completa precio/zona", pres:"pc", alta:"2026-05-23",
@@ -419,9 +421,6 @@ document.getElementById("q").addEventListener("input",render);
 document.getElementById("sort").addEventListener("change",e=>{ sortMode=e.target.value; render(); });
 document.getElementById("actualizado").textContent="Actualizado: "+FECHA+" · 3+ hab · ≤ 420.000 € (sin IVA) · ⭐ ✕ 📝 y anuncios añadidos se guardan en este navegador";
 render();
-
-// Arranque de la sincronización: baja lo guardado en la nube; si no hay nada, sube lo local.
-pullRemote().then(function(res){ if(res.state==="empty"){ var s=_snap(); if(SYNC_KEYS.some(function(k){ var v=s[k]; return v && v!=="[]" && v!=="{}"; })){ pushRemote(); } else { setSync("sin datos compartidos todavía"); } } else if(res.state==="applied"){ setSync("✓ sincronizado con la nube"); } else { setSync("⚠ sin conexión con la nube"); } dailyBackup(); });
 
 // Arranque de la sincronización: baja lo guardado en la nube; si no hay nada, sube lo local.
 pullRemote().then(function(res){ if(res.state==="empty"){ var s=_snap(); if(SYNC_KEYS.some(function(k){ var v=s[k]; return v && v!=="[]" && v!=="{}"; })){ pushRemote(); } else { setSync("sin datos compartidos todavía"); } } else if(res.state==="applied"){ setSync("✓ sincronizado con la nube"); } else { setSync("⚠ sin conexión con la nube"); } dailyBackup(); });
