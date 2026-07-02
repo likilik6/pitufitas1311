@@ -1,6 +1,11 @@
 {
   "informes": [
     {
+      "fecha": "02/07/2026",
+      "archivo": "obra-nueva-madrid-2026-07-02.pdf",
+      "resumen": "Sin novedades dentro de presupuesto ni retiradas por venta: 26 oportunidades en seguimiento (15 cooperativas) reconfirmadas disponibles (Tres Hermanas, Anzale Colmenar, Valbuena Villalba I y Edificio Ibiza 14 verificadas hoy). Sin avisos 📈 de conteo: los 14 municipios estables respecto al 01/07 (Collado Villalba 5, Madrid Nuevo Norte 6). Leads descartados por precio: El Cantizal/Castilla Plaza (Las Rozas, desde 586.000 €+IVA) y Olea de Tempranales (SSR, desde 897.000 €); sin noticias nuevas destacadas (MNN/Las Tablas Oeste y Valgrande sin cambios)."
+    },
+    {
       "fecha": "01/07/2026",
       "archivo": "obra-nueva-madrid-2026-07-01.pdf",
       "resumen": "Sin novedades dentro de presupuesto ni retiradas por venta; 26 promociones en seguimiento (15 cooperativas), con Residencial Tres Hermanas (Villalba) reconfirmada en últimas unidades. Aviso 📈 de conteo en Tres Cantos (7→8): corresponde a Habitat La Encina (Habitat, 92 viv, desde ~499.500 €), fuera del tope de 420.000 € → a «excluidas»; zonas prioritarias estables (Collado Villalba 5, Madrid Nuevo Norte 6). Noticia: Madrid Nuevo Norte con obras de urbanización en marcha en Las Tablas Oeste y primeros suelos al mercado antes de finales de 2026; Ley 2/2026 de vivienda protegida vigente."
@@ -143,4 +148,17 @@
     {
       "fecha": "24/05/2026",
       "archivo": "obra-nueva-madrid-2026-05-24.pdf",
-      "resumen": "Novedad: Cooperativa Collado Villalba (C/ San José 43, CooperOpen/CONCOVI) abre captación a precio de coste en zona prioritaria. 17 oportunidades en seguimiento, 8 cooperativas. Zonas prioritarias estables; aviso menor: Colmenar Viejo 20→21 obra nueva. Noticias: ava
+      "resumen": "Novedad: Cooperativa Collado Villalba (C/ San José 43, CooperOpen/CONCOVI) abre captación a precio de coste en zona prioritaria. 17 oportunidades en seguimiento, 8 cooperativas. Zonas prioritarias estables; aviso menor: Colmenar Viejo 20→21 obra nueva. Noticias: avance de obras de Las Tablas Oeste (Madrid Nuevo Norte) y plan de Grupo Ibosa de 3.000 viviendas en cooperativa."
+    },
+    {
+      "fecha": "23/05/2026",
+      "archivo": "obra-nueva-madrid-2026-05-23.pdf",
+      "resumen": "Cooperativa Vive Villalba (AUNA Arquitectos) en comercialización: novedad añadida en zona prioritaria (Collado Villalba)."
+    },
+    {
+      "fecha": "22/05/2026",
+      "archivo": "obra-nueva-madrid-2026-05-22.pdf",
+      "resumen": "Primer informe de seguimiento: barrido inicial de obra nueva y cooperativas en Madrid norte/noroeste dentro de presupuesto (≤ 420.000 € base, mín. 3 dormitorios), con foco en las zonas prioritarias (Collado Villalba y Madrid Nuevo Norte)."
+    }
+  ]
+}
